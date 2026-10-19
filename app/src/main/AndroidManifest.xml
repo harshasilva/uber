@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Used only by the explicitly enabled, draggable live rate badge. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- OCR is bundled. No network, accessibility, camera or storage permission. -->
+    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />
+    <application
+        android:name=".RideWiseApplication"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:icon="@drawable/ic_launcher"
+        android:roundIcon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.RideWise">
+        <activity android:name=".MainActivity" android:exported="true" android:resizeableActivity="true" android:windowSoftInputMode="adjustResize" android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+        <service android:name=".capture.screencapture.ScreenCaptureService" android:exported="false" android:foregroundServiceType="mediaProjection" />
+        <service android:name=".capture.automatic.AutomaticScreenService" android:exported="false" android:foregroundServiceType="mediaProjection" />
+        <service android:name=".live.RideNotificationListener" android:label="RideWise live ride assistant"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" android:exported="false">
+            <intent-filter><action android:name="android.service.notification.NotificationListenerService" /></intent-filter>
+        </service>
+        <receiver android:name=".live.StopLiveAssistantReceiver" android:exported="false" />
+    </application>
+</manifest>
